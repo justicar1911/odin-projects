@@ -206,6 +206,7 @@ main h2 {
 
 footer {
   padding: 1rem;
+  justify-content: flex-end;
 }
 footer p {
   color: var(--bg-color-3);
