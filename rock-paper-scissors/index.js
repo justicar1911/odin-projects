@@ -1,45 +1,63 @@
-function playGame(round = 5) {
-    let humanScore = 0;
-    let computerScore = 0;
+const playBtn = document.querySelector("#playBtn")
+const controller = document.querySelector("#controller")
+const result = document.querySelector("#result")
 
-    for (let i = 0; i < round; i++) {
-        playRound(getHumanChoice(), getComputerChoice())
+let playerSelection = ''
+let humanScore = 0;
+let computerScore = 0;
+
+controller.addEventListener("click", (event) => {
+    if (event.target.tagName === "BUTTON") {
+        playerSelection = event.target.innerText
+    }
+})
+playBtn.addEventListener("click", playGame)
+
+function playGame() {
+    if (!playerSelection) {
+        showMessage(result, "p", "You must select an option first!", false)
+        return
     }
 
-    let message = humanScore > computerScore ? 'Human win!' : humanScore < computerScore ? 'Computer win!' : 'Draw!'
+    playRound(getHumanChoice(), getComputerChoice())
 
-    console.log(`${message}\nHuman score: ${humanScore}\nComputer Score: ${computerScore}`)
-
-    function playRound(humanChoice, computerChoice) {
-        if (humanChoice == 'rock' && computerChoice == 'scissors'
-            || humanChoice == 'paper' && computerChoice == 'rock'
-            || humanChoice == 'scissors' && computerChoice == 'paper') {
-            console.log(`You win! ${humanChoice} beats ${computerChoice}`)
-            humanScore += 1
-        } else if (humanChoice == computerChoice) {
-            console.log(`Draw!, both are ${humanChoice}`)
-        } else {
-            console.log(`You lose! ${computerChoice} beats ${humanChoice}`)
-            computerScore += 1
-        }
+    if (humanScore === 5 || computerScore === 5) {
+        const msg = humanScore > computerScore ? 'Human wins!' : 'Computer wins!'
+        showMessage(result, "p", msg)
+        resetGame()
     }
+
+}
+function playRound(humanChoice, computerChoice) {
+    resetPlayerSelection()
+    clearOutputMsg()
+    let msg = ''
+
+    if (humanChoice === 'Rock' && computerChoice === 'Scissors'
+        || humanChoice === 'Paper' && computerChoice === 'Rock'
+        || humanChoice === 'Scissors' && computerChoice === 'Paper') {
+        msg = `You win!\n${humanChoice} beats ${computerChoice}`
+        humanScore++
+    } else if (humanChoice === computerChoice) {
+        msg = `Draw! Both are ${humanChoice}`
+    } else {
+        msg = `You lose! ${computerChoice} beats ${humanChoice}`
+        computerScore++
+    }
+
+    msg += `\nHuman score: ${humanScore}\nComputer Score: ${computerScore}`
+
+    showMessage(result, "p", msg)
 }
 
 
 function getHumanChoice() {
-    let choice = ''
-    let validAnswers = ['rock', 'paper', 'scissors']
-
-    while (!validAnswers.includes(choice)) {
-        choice = prompt('Input your choice').toLowerCase()
-    }
-
-    return choice
+    return playerSelection
 }
 
 function getComputerChoice() {
-    let choices = ['rock', 'paper', 'scissors']
-    let random = getRandomInt(3)
+    const choices = ['Rock', 'Paper', 'Scissors']
+    const random = getRandomInt(choices.length)
 
     return choices[random]
 }
@@ -48,4 +66,21 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max)
 }
 
-playGame()
+function resetGame() {
+    humanScore = 0
+    computerScore = 0
+}
+
+function clearOutputMsg() {
+    result.innerHTML = ''
+}
+
+function resetPlayerSelection() {
+    playerSelection = ''
+}
+
+function showMessage(parentNode, tagName, text, isAppend = true) {
+    const element = document.createElement(tagName)
+    element.innerText = text
+    isAppend ? parentNode.appendChild(element) : parentNode.innerHTML = element
+}
