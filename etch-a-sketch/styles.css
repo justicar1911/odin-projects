@@ -1,0 +1,35 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  margin: 2rem;
+}
+
+input {
+  padding: 1rem;
+  width: 240px;
+}
+
+button {
+  padding: 1rem;
+}
+
+#gridContainer {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  background-color: rgb(128, 128, 128, 0.1);
+}
+
+#gridContainer div {
+  cursor: pointer;
+  flex-grow: 1;
+}
